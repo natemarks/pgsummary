@@ -17,8 +17,6 @@ DEFAULT_BRANCH := main
 help: ## Show this help.
 	@fgrep -h "##" $(MAKEFILE_LIST) | fgrep -v fgrep | sed -e 's/\\$$//' | sed -e 's/##//'
 
-all: run
-
 clean-venv: ## re-create virtual env
 	rm -rf .venv
 	python3 -m venv .venv
@@ -28,35 +26,18 @@ clean-venv: ## re-create virtual env
     )
 
 ${EXECUTABLES}:
-	rm -rf build/linux
+	find . -type l -name $@ -exec rm -f {} \;
 	mkdir -p build/$(COMMIT)/linux/amd64 build/linux/amd64
 	env GOOS=linux GOARCH=amd64 \
 	go build  -v -o build/$(COMMIT)/linux/amd64/$@ ${PKG}/cmd/$@
-	rm -rf build/linux/amd64/$@
 	ln -s $(CDIR)/build/$(COMMIT)/linux/amd64/$@ $(CDIR)/build/linux/amd64/$@
-	rm -rf build/darwin
 	mkdir -p build/$(COMMIT)/darwin/amd64 build/darwin/amd64
 	env GOOS=darwin GOARCH=amd64 \
 	go build  -v -o build/$(COMMIT)/darwin/amd64/$@ ${PKG}/cmd/$@
-	rm -rf build/darwin/amd64/$@
 	ln -s $(CDIR)/build/$(COMMIT)/darwin/amd64/$@ $(CDIR)/build/darwin/amd64/$@
 	echo $@
 
-fff: ${EXECUTABLES}
-
-build: ## build the binaries with commit IDs
-	rm -rf build/linux
-	mkdir -p build/$(COMMIT)/linux/amd64 build/linux/amd64
-	env GOOS=linux GOARCH=amd64 \
-	go build  -v -o build/$(COMMIT)/linux/amd64/${OUT} ${PKG}
-	rm -rf build/linux/amd64/${OUT}
-	ln -s $(CDIR)/build/$(COMMIT)/linux/amd64/${OUT} $(CDIR)/build/linux/amd64/${OUT}
-	rm -rf build/darwin
-	mkdir -p build/$(COMMIT)/darwin/amd64 build/darwin/amd64
-	env GOOS=darwin GOARCH=amd64 \
-	go build  -v -o build/$(COMMIT)/darwin/amd64/${OUT} ${PKG}
-	rm -rf build/darwin/amd64/${OUT}
-	ln -s $(CDIR)/build/$(COMMIT)/darwin/amd64/${OUT} $(CDIR)/build/darwin/amd64/${OUT}
+build: ${EXECUTABLES}
 
 release:  ## Build release versions
 	mkdir -p build/$(VERSION)
@@ -79,9 +60,6 @@ lint:
 	done
 
 static: vet lint test
-
-run: server
-	./${OUT}
 
 clean:
 	-@rm ${OUT} ${OUT}-v*
