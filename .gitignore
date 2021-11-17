@@ -1,0 +1,9 @@
+build/
+upload/
+vendor/
+.idea/
+.vscode/
+*.test
+*.out
+*.iml
+.venv/
