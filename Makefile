@@ -39,14 +39,10 @@ ${EXECUTABLES}:
 
 build: ${EXECUTABLES}
 
-release:  ## Build release versions
-	mkdir -p build/$(VERSION)
-	env GOOS=linux GOARCH=amd64 \
-	go build  -v -o build/$(VERSION)/${OUT}_linux_amd64 \
-	-ldflags="-X github.com/natemarks/postgres-examples/version.Version=${VERSION}" ${PKG}
-	env GOOS=darwin GOARCH=amd64 \
-	go build  -v -o build/$(VERSION)/${OUT}_darwin_amd_64 \
-	-ldflags="-X github.com/natemarks/postgres-examples/version.Version=${VERSION}" ${PKG}
+release:  git-status build ## Build release versions
+	echo "VERSION: $(VERSION)" > ./build/$(COMMIT)/version.txt
+	echo "COMMIT: $(COMMIT)" >> ./build/$(COMMIT)/version.txt
+	tar -C ./build/$(COMMIT) -czvf pgsummary-$(VERSION).tar.gz .
 
 test:
 	@go test -short ${PKG_LIST}
@@ -78,4 +74,13 @@ else
 endif
 
 
-.PHONY: run build release static upload vet lint
+git-status: ## require status is clean so we can use undo_edits to put things back
+	@status=$$(git status --porcelain); \
+	if [ ! -z "$${status}" ]; \
+	then \
+		echo "Error - working directory is dirty. Commit those changes!"; \
+		exit 1; \
+	fi
+
+
+.PHONY: build release static upload vet lint
