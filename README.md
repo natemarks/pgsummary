@@ -11,6 +11,7 @@ The tool was build with AWS RDS postgres in mind, but probably works pretty broa
 ## Installation
 
 Download the tarball and unpack it. You should get something like
+```
 /
 ├── darwin
 │ └── amd64
@@ -22,7 +23,7 @@ Download the tarball and unpack it. You should get something like
 │     └── pgreport
 ├── pgsummary-0.0.0.tar.gz
 └── version.txt
-
+```
 ## Usage
 
 Create a summary 
