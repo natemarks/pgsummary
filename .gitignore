@@ -8,3 +8,4 @@ vendor/
 *.iml
 .venv/
 *.json
+*.tar.gz
