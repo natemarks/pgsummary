@@ -4,7 +4,7 @@
 # Be sure to place this BEFORE `include` directives, if any.
 THIS_FILE := $(lastword $(MAKEFILE_LIST))
 PKG := github.com/natemarks/pgsummary
-VERSION := 0.0.0
+VERSION := 0.0.1
 COMMIT := $(shell git describe --always --long --dirty)
 PKG_LIST := $(shell go list ${PKG}/... | grep -v /vendor/)
 GO_FILES := $(shell find . -name '*.go' | grep -v /vendor/)
