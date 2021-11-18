@@ -5,7 +5,7 @@
 THIS_FILE := $(lastword $(MAKEFILE_LIST))
 PKG := github.com/natemarks/pgsummary
 VERSION := 0.0.1
-COMMIT := $(shell git describe --always --long --dirty)
+COMMIT := $(shell git rev-parse HEAD)
 PKG_LIST := $(shell go list ${PKG}/... | grep -v /vendor/)
 GO_FILES := $(shell find . -name '*.go' | grep -v /vendor/)
 CDIR = $(shell pwd)
@@ -37,7 +37,7 @@ ${EXECUTABLES}:
 	ln -s $(CDIR)/build/$(COMMIT)/darwin/amd64/$@ $(CDIR)/build/darwin/amd64/$@
 	echo $@
 
-build: ${EXECUTABLES}
+build: git-status ${EXECUTABLES}
 
 release:  git-status build ## Build release versions
 	echo "VERSION: $(VERSION)" > ./build/$(COMMIT)/version.txt
