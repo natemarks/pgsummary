@@ -43,7 +43,7 @@ build: git-status ${EXECUTABLES}
 	rm -f build/current
 	ln -s $(CDIR)/build/$(COMMIT) $(CDIR)/build/current
 
-release:
+release: git-status build
 	mkdir -p release/$(VERSION)
 	@for o in $(GOOS); do \
 	  for a in $(GOARCH); do \
