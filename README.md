@@ -10,19 +10,34 @@ The tool was build with AWS RDS postgres in mind, but probably works pretty broa
 
 ## Installation
 
-Download the tarball and unpack it. You should get something like
+The pgsummary executables can be manually downloaded from the githbib project [releases](https://github.com/natemarks/pgsummary/releases)
+
+To automate the process, there is an installation script for it in [pipeline-scripts](https://github.com/natemarks/pipeline-scripts) project.
+
 ```
-/
-├── darwin
-│ └── amd64
-│     ├── pgcompare
-│     └── pgreport
-├── linux
-│ └── amd64
-│     ├── pgcompare
-│     └── pgreport
-├── pgsummary-0.0.0.tar.gz
-└── version.txt
+# use v0.0.29 of the pipeline installaer script to install version 0.0.5 of pgsummary
+
+bash -c 'curl "https://raw.githubusercontent.com/natemarks/pipeline-scripts/v0.0.29/scripts/install_pgsummary.sh" | bash -s --  -d ~/pgsummary_install -r 0.0.5'
+
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+100  2871  100  2871    0     0  12592      0 --:--:-- --:--:-- --:--:-- 12592
+Read parameters:
+- release_version: 0.0.5
+- directory: /Users/nmarks/pgsummary_install
+x ./
+x ./pgcompare
+x ./pgreport
+x ./version.txt
+/Users/nmarks/pgsummary_install/0.0.5
+❯ tree ~/pgsummary_install
+/Users/nmarks/pgsummary_install
+└── 0.0.5
+    ├── pgcompare
+    ├── pgreport
+    ├── pgsummary_0.0.5_darwin_amd64.tar.gz
+    └── version.txt
+
 ```
 ## Usage
 
