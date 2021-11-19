@@ -17,7 +17,8 @@ To automate the process, there is an installation script for it in [pipeline-scr
 ```
 # use v0.0.29 of the pipeline installaer script to install version 0.0.7 of pgsummary
 
-bash -c 'curl "https://raw.githubusercontent.com/natemarks/pipeline-scripts/v0.0.29/scripts/install_pgsummary.sh" | bash -s --  -d ~/pgsummary_install -r 0.0.7'
+bash -c 'curl "https://raw.githubusercontent.com/natemarks/pipeline-scripts/v0.0.29/scripts/install_pgsummary.sh"\
+ | bash -s --  -d ~/pgsummary_install -r 0.0.7'
 
   % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
                                  Dload  Upload   Total   Spent    Left  Speed
