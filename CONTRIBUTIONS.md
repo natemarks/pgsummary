@@ -9,5 +9,7 @@ make build
 # when I'm happy bump the version according to the type of change
 make part=[major|minor|patch] bump
 # now create a release tarball for the new version
+# push after the bump. bump may update some docs
+git push origin --all && git push origin --tags
 make release
 ```
