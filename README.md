@@ -15,27 +15,27 @@ The pgsummary executables can be manually downloaded from the githbib project [r
 To automate the process, there is an installation script for it in [pipeline-scripts](https://github.com/natemarks/pipeline-scripts) project.
 
 ```
-# use v0.0.29 of the pipeline installaer script to install version 0.0.5 of pgsummary
+# use v0.0.29 of the pipeline installaer script to install version 0.0.6 of pgsummary
 
-bash -c 'curl "https://raw.githubusercontent.com/natemarks/pipeline-scripts/v0.0.29/scripts/install_pgsummary.sh" | bash -s --  -d ~/pgsummary_install -r 0.0.5'
+bash -c 'curl "https://raw.githubusercontent.com/natemarks/pipeline-scripts/v0.0.29/scripts/install_pgsummary.sh" | bash -s --  -d ~/pgsummary_install -r 0.0.6'
 
   % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
                                  Dload  Upload   Total   Spent    Left  Speed
 100  2871  100  2871    0     0  12592      0 --:--:-- --:--:-- --:--:-- 12592
 Read parameters:
-- release_version: 0.0.5
+- release_version: 0.0.6
 - directory: /Users/nmarks/pgsummary_install
 x ./
 x ./pgcompare
 x ./pgreport
 x ./version.txt
-/Users/nmarks/pgsummary_install/0.0.5
+/Users/nmarks/pgsummary_install/0.0.6
 ❯ tree ~/pgsummary_install
 /Users/nmarks/pgsummary_install
-└── 0.0.5
+└── 0.0.6
     ├── pgcompare
     ├── pgreport
-    ├── pgsummary_0.0.5_darwin_amd64.tar.gz
+    ├── pgsummary_0.0.6_darwin_amd64.tar.gz
     └── version.txt
 
 ```
