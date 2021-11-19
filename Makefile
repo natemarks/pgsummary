@@ -10,6 +10,8 @@ PKG_LIST := $(shell go list ${PKG}/... | grep -v /vendor/)
 GO_FILES := $(shell find . -name '*.go' | grep -v /vendor/)
 CDIR = $(shell pwd)
 EXECUTABLES := pgreport pgcompare
+GOOS := linux darwin
+GOARCH := amd64
 
 CURRENT_BRANCH := $(shell git rev-parse --abbrev-ref HEAD)
 DEFAULT_BRANCH := main
@@ -26,23 +28,28 @@ clean-venv: ## re-create virtual env
     )
 
 ${EXECUTABLES}:
-	find . -type l -name $@ -exec rm -f {} \;
-	mkdir -p build/$(COMMIT)/linux/amd64 build/linux/amd64
-	env GOOS=linux GOARCH=amd64 \
-	go build  -v -o build/$(COMMIT)/linux/amd64/$@ ${PKG}/cmd/$@
-	ln -s $(CDIR)/build/$(COMMIT)/linux/amd64/$@ $(CDIR)/build/linux/amd64/$@
-	mkdir -p build/$(COMMIT)/darwin/amd64 build/darwin/amd64
-	env GOOS=darwin GOARCH=amd64 \
-	go build  -v -o build/$(COMMIT)/darwin/amd64/$@ ${PKG}/cmd/$@
-	ln -s $(CDIR)/build/$(COMMIT)/darwin/amd64/$@ $(CDIR)/build/darwin/amd64/$@
-	echo $@
+	@for o in $(GOOS); do \
+	  for a in $(GOARCH); do \
+        echo "$(COMMIT)/$${o}/$${a}" ; \
+        mkdir -p build/$(COMMIT)/$${o}/$${a} ; \
+        echo "VERSION: $(VERSION)" > build/$(COMMIT)/$${o}/$${a}/version.txt ; \
+        echo "COMMIT: $(COMMIT)" >> build/$(COMMIT)/$${o}/$${a}/version.txt ; \
+        env GOOS=$${o} GOARCH=$${a} \
+        go build  -v -o build/$(COMMIT)/$${o}/$${a}/$@ ${PKG}/cmd/$@ ; \
+	  done \
+    done ; \
 
 build: git-status ${EXECUTABLES}
+	rm -f build/current
+	ln -s $(CDIR)/build/$(COMMIT) $(CDIR)/build/current
 
-release:  git-status build ## Build release versions
-	echo "VERSION: $(VERSION)" > ./build/$(COMMIT)/version.txt
-	echo "COMMIT: $(COMMIT)" >> ./build/$(COMMIT)/version.txt
-	tar -C ./build/$(COMMIT) -czvf pgsummary-$(VERSION).tar.gz .
+release:
+	mkdir -p release/$(VERSION)
+	@for o in $(GOOS); do \
+	  for a in $(GOARCH); do \
+        tar -C ./build/$(COMMIT)/$${o}/$${a} -czvf release/$(VERSION)/pgsummary_$(VERSION)_$${o}_$${a}.tar.gz . ; \
+	  done \
+    done ; \
 
 test:
 	@go test -short ${PKG_LIST}
