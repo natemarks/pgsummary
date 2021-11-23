@@ -23,7 +23,7 @@ func outputInstanceReport(hostname string, json []byte) {
 
 func main() {
 
-	logger := log.With().Str("test_key", "test_value").Logger()
+	logger := log.With().Logger()
 
 	hostPtr := flag.String("host", "localhost", "Postgres instance FQDN")
 	portPtr := flag.Int("port", 5432, "Postgres instance port")

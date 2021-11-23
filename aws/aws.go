@@ -34,3 +34,9 @@ func GetCredentialsFromAWSSM(input GetCredentialInput, log *zerolog.Logger) GetC
 	}
 	return res
 }
+
+func RestoreRDSInstanceFromSnapshot() {
+
+
+
+}

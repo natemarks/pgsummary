@@ -41,7 +41,7 @@ x ./version.txt
     └── version.txt
 
 ```
-## Usage
+## Using pgreport
 
 Run pgreport to create a summary json file. The JSON is also dumped to stdout
 ```shell
@@ -134,4 +134,23 @@ pgreport \
     }
   ]
 }%
+```
+
+## Using pgrestore
+
+The purpose of pgrestore is to make it easy to test RDS postgres database snapshots. Given the database you want to test, it looks up the latest snapshot,  subnet groups, VPC security groups. Then it creates a new, temporary database and prepends "deleteme-" to the original database name for the new temporary instance. It also tags the temporary instance "deleteme=true".  All of this is to make it easy to create an accessible database from the latest snapshot. More importantly, it makes it safer and easier to delete the temporary database
+
+
+```shell
+AWS_DEFAULT_REGION=us-east-1 build/current/darwin/amd64/pgrestore -instance original-db-name
+
+{"level":"info","time":"2021-11-23T12:47:57-05:00","message":"Using AWS_DEFAULT_REGION: us-east-1"}
+{"level":"info","time":"2021-11-23T12:47:57-05:00","message":"looking up latest snaphot for RDS instance: original-db-name"}
+{"level":"info","time":"2021-11-23T12:47:57-05:00","message":"latest snapshot for instance (original-db-name): rds:original-db-name-2021-11-23-02-15"}
+{"level":"info","time":"2021-11-23T12:47:57-05:00","message":"looking up subnet group id for RDS instance: original-db-name"}
+{"level":"info","time":"2021-11-23T12:47:58-05:00","message":"subnet group name for instance (original-db-name): original-db-name-abc123"}
+{"level":"info","time":"2021-11-23T12:47:58-05:00","message":"looking up VPC security groups for RDS instance: original-db-name"}
+{"level":"info","time":"2021-11-23T12:47:58-05:00","message":"found 2 VPC Security groups for instance (original-db-name)"}
+{"level":"info","time":"2021-11-23T12:47:58-05:00","message":"Restoring instance: deleteme-original-db-name from snapshot ID: rds:original-db-name-2021-11-23-02-15"}
+{"level":"info","time":"2021-11-23T12:47:59-05:00","message":"Restoring snapshot: rds:original-db-name-2021-11-23-02-15 to instance: deleteme-original-db-name"}
 ```

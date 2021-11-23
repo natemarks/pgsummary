@@ -2,6 +2,7 @@
 
 # Determine this makefile's path.
 # Be sure to place this BEFORE `include` directives, if any.
+DEFAULT_BRANCH := main
 THIS_FILE := $(lastword $(MAKEFILE_LIST))
 PKG := github.com/natemarks/pgsummary
 VERSION := 0.0.7
@@ -9,7 +10,7 @@ COMMIT := $(shell git rev-parse HEAD)
 PKG_LIST := $(shell go list ${PKG}/... | grep -v /vendor/)
 GO_FILES := $(shell find . -name '*.go' | grep -v /vendor/)
 CDIR = $(shell pwd)
-EXECUTABLES := pgreport pgcompare
+EXECUTABLES := pgreport pgcompare pgrestore
 GOOS := linux darwin
 GOARCH := amd64
 
@@ -89,5 +90,7 @@ git-status: ## require status is clean so we can use undo_edits to put things ba
 		exit 1; \
 	fi
 
+rebase: git-status ## rebase current feature branch on to the default branch
+	git fetch && git rebase origin/$(DEFAULT_BRANCH)
 
 .PHONY: build release static upload vet lint
